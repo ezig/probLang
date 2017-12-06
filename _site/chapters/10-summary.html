@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Summary and outlook</title>
+  <link rel="stylesheet" href="https://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  <link rel="stylesheet" href="/probLang/assets/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+  <!-- <link rel="stylesheet" href="/probLang/assets/css/editor.css"> -->
+  <!-- <link rel="stylesheet" href="/probLang/assets/css/webppl-viz.css"> -->
+  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-editor-1.0.1.css">
+  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-viz-0.7.6.css">
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="http://gscontras.github.io/probLang/probLang/chapters/10-summary.html">
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+  <script src="/probLang/assets/js/parse-bibtex.js"></script>
+  <script src="/probLang/assets/js/main.js"></script>
+  <!-- <script src="/probLang/assets/js/webppl-editor.js"></script> -->
+  <!-- <script src="/probLang/assets/js/webppl-viz.js"></script>   -->
+  <!-- <script src="/probLang/assets/js/webppl.min.js" defer async></script> -->
+  <script src="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-editor-1.0.9.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-viz-0.7.11.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-v0.9.7.js" defer async></script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+  <a class="site-title" href="/probLang/">Probabilistic languge understanding</a>
+
+  <a class="site-subtitle">An introduction to the Rational Speech Act framework</a>
+
+  <a class="site-authors">By Gregory Scontras and Michael Henry Tessler</a>
+</header>
+
+
+    <div class="page-content-wrapper">
+      <div class="page-content">
+        <h1 class="chapter-title">Summary and outlook</h1>
+
+<h3 id="chapter-10-closing-remarks">Chapter 10: Closing remarks</h3>
+
+<p><em>Authors: Judith Degen, Gregory Scontras, and Michael Henry Tessler</em></p>
+
+<p>We close by discussing a number of questions that often come up in the context of RSA. These questions can be divided into three categories: <strong>understanding</strong> the models, <strong>testing</strong> the models, and <strong>extending</strong> the models. We have structured this section according to that categorization.</p>
+
+<h4 id="understanding-the-models">1. Understanding the models</h4>
+
+<p><strong>What is the status of RSA as a framework? Given the diversity among models, what are the core features of RSA?</strong></p>
+
+<p>The RSA modeling framework views language understanding as <strong>recursive social reasoning</strong> between speakers and listeners. Language users interpret utterances by reasoning about the process that generated that utterance: a model speaker trying to inform a naive listener about the state of the world. Language users choose utterances in a similar fashion, by reasoning about how a listener would interpret the utterance they choose. In practice, these various levels of reasoning get implemented as simulation-based probabilistic programs, here in the probabilistic programming language WebPPL.</p>
+
+<p>We purposefully describe RSA as a framework rather than merely a (family of) model(s) in order to highlight its status as a mode of inquiry. By formally articulating the pragmatic reasoning process, RSA serves as a <strong>tool</strong> for understanding how language is used and understood in context. RSA allows us to move beyond high-level prose descriptions of pragmatic phenomena to actually implementing the reasoning via simulation-based probabilistic programs. When successful, these models serve as a proof-of-concept for the computational-level description of the relevant phenomena. But they become even more interesting when they fail. Because the models make clear qualitative and quantitative predictions about language use, they can be tested against behavioral data. Where the patterns predicted by the model do not match those observed empirically, model assumptions must be incrementally revised. These revisions serve as <strong>testable hypotheses</strong> concerning the ways in which various aspects of context interact in communication. What results is a seemingly-diverse family of models covering a range of different pragmatic phenomena.</p>
+
+<p>Despite this diversity, the models we have encountered share various features; it is these features that stand at the core of the RSA framework. The grounding assumption of RSA is that language gets used for the purpose of <strong>communication</strong>. The goal of the speaker is to successfully transmit information to a listener; the goal of the listener is to successfully recover that information from the speaker’s utterance. The details of this process – <strong>nested inference about utterances, integrating world knowledge in context</strong> – define the RSA framework.</p>
+
+<p>The pragmatic calculus proceeds in a similar fashion for each of the models we encountered: a speaker observes some state and chooses an utterance to best communicate that state to a listener in order to resolve some Question Under Discussion (QUD); the listener observes that utterance and infers the state that the speaker must have encountered. Thus, in the RSA framework, the speaker and listener <strong>coordinate</strong> on the utterance and interpretation that are most likely to correctly resolve the QUD.</p>
+
+<p>In order to formally articulate the pragmatic reasoning that stands at the heart of RSA, our models minimally require the following components. First, we must model the various <strong>levels of inference</strong>. A typical RSA model includes a literal listener, which serves to ground the truth-functional semantics; a speaker, who chooses utterances by soft-max optimizing utility; and the pragmatic listener, who integrates their beliefs about the speaker and the world via Bayes’ rule to arrive at an interpretation of the observed utterance. Second, we must model the <strong>prior beliefs</strong> that language users bring to bear on conversation itself: the possible states and their relative probabilities, the possible utterances and their relative costs, and a truth-functional mapping between the utterances and the states they describe. Third, we must model additional aspects of the utterance <strong>context</strong>, including the relevant QUD(s) and beliefs about speaker optimality. Any number of these model components may be modified in various ways, but the core architectural assumption of nested inference about utterances integrating world knowledge in context remains.</p>
+
+<p><strong>How does one decide which aspects of context to represent in a model?</strong></p>
+
+<p>The question of what counts as context is an unsolved – and indeed unsolvable – problem. There is an infinity of facts about any communicative scenario: the color of the floor, the temperature of the room, the number of attendant cats, etc. Which facts matter for the purpose of communication? The goal of modeling interactive language use cannot be to represent the entirety of the world – the world does that already for us. Instead, the goal is to <strong>identify</strong>, <strong>isolate</strong>, and <strong>represent the interaction</strong> of those aspects of context that influence communication in systematic ways.</p>
+
+<p>RSA does not answer the question of which aspects of context influence communication. However, it does offer a way to explicitly represent the interaction of those aspects of context that the modeler hypothesizes matter in the computation of meaning, all while assuming a central mechanism by which meaning is computed: Bayes’ rule. The resulting model generates quantitative predictions which can then be tested against behavioral data. Via subsequent model comparison, RSA thus provides the means by which to ask the question of <strong>which aspects of context influence communication</strong>.</p>
+
+<p>Across the models that we have encountered, the aspects of context that are represented by default are the relevant state space, prior beliefs about the state space (world knowledge), as well as utterance alternatives and their properties. RSA models also contain implicit assumptions about the QUD, properties of the speaker, and the contents of common ground, even without explicit alternatives. For instance, unless modeled otherwise</p>
+
+<ul>
+  <li>
+    <p>the representation of the state space implicitly encodes the QUD that an utterance’s informativity is computed with respect to,</p>
+  </li>
+  <li>
+    <p>the speaker is represented as a cooperative speaker with the goal to soft-maximize utility (by computing utterance informativity),</p>
+  </li>
+  <li>
+    <p>world knowledge is implicitly assumed to be in common ground by having the speaker and the listener perform their computations on the same prior, and</p>
+  </li>
+  <li>
+    <p>utterance alternatives are implicitly assumed to have equal costs.</p>
+  </li>
+</ul>
+
+<p>But RSA also allows for explicitly modeling these factors. In Chapters 3 and 4, we saw how introducing explicit QUD alternatives changes the result of the informativity computation, but not the general formalization of the computation of that informativity. Similarly, in Chapters 2 and 6, we saw how explicitly modeling a non-omniscient speaker increases the listener’s uncertainty, but not the computations performed to resolve that uncertainty. In Chapter 9, we saw that amending the speaker’s utility function can accommodate social goals beyond informativity. <a href="http://cocolab.stanford.edu/papers/DegenEtAl2015-Cogsci.pdf">Degen et al. (2015)</a> show how deviating from the assumption that priors are always in common ground can capture the situation-specific effects of prior knowledge. In Chapters 4 and 6 , we considered a principled way by which to assign asymmetric costs to utterances. And in Chapter 7, we saw how to model richer world knowledge via a structured prior.</p>
+
+<p>It is an empirical question whether representing these aspects of context will suffice for the purpose of characterizing pragmatic language use. Probably not. Still, the above factors are likely to matter in the computation of any meaning-related inferences. And, the true power of RSA is not in isolating these factors, but in offering a principled way with which to formulate their interaction via nested probabilistic inference. Forcing researchers to be <strong>explicit</strong> about the precise way in which these factors interact allows for the <strong>systematic investigation</strong> of contextual information in communication.</p>
+
+<p><strong>We know that language users are limited cognitive agents. Where do resource limitations come in?</strong></p>
+
+<p>In short, the answer to this question is: across models, resource limitations are captured in the rationality parameter <strong><script type="math/tex">\alpha</script></strong> and in the assumed <strong>depth of reasoning</strong>. In both cases, these aspects of the models are mere approximations of the resource limitations; we are not modeling the limitations themselves, but rather the <strong>downstream effects</strong> they have on the reasoning process. Resource limitations may also be captured by model-specific assumptions, for example, the prior on quantifier scope we saw in Chapter 4, which we interpreted as differences in the ease with which a particular scope assignment comes to mind a priori.</p>
+
+<p>If you are someone interested in memory, attention, cognitive control, and related issues, you will find this a very unsatisfying answer. In general, there is a distinct lack of explicit engagement of RSA modelers with issues of resource limitations. This is a result of RSA models being an approach in the tradition of <strong>rational analysis</strong> (<a href="https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/is-human-cognition-adaptive/518FCFF303190968CF1F54D2A603C026">Anderson, 1991</a>), an approach towards formulating and revising theories of cognition. Anderson specifies rational analysis as proceeding in the following six steps:</p>
+
+<ol>
+  <li>Specify precisely the goals of the cognitive system.</li>
+  <li>Develop a formal model of the environment to which the system is adapted.</li>
+  <li>Make the minimal assumptions about computational limitations.</li>
+  <li>Derive the optimal behavioral function given steps 1-3.</li>
+  <li>Examine the empirical literature to see whether the predictions of the behavioral function are confirmed.</li>
+  <li>Repeat, iteratively refining the theory.</li>
+</ol>
+
+<p>The focus in the rational analysis approach is clearly on what the agent’s optimal behavior should look like. However, <strong>bounded rationality</strong> gets acknowledged in step 3. The minimal assumptions about computational limitations included in any RSA model are non-infinite values of the rationality parameter <script type="math/tex">\alpha</script> and non-infinite depths of recursion. The smaller the <script type="math/tex">\alpha</script> parameter, the less the speaker maximizes their utility on a particular reasoning step; and the lower the depth of recursion, the less overall reasoning there is. While <script type="math/tex">\alpha</script> values generally vary wildly across tasks – indeed, one should never interpret an <script type="math/tex">\alpha</script> value in isolation  – most RSA models assume the listener is an L1 listener and the speaker an S1 or S2 speaker.</p>
+
+<p>Thus far, little attention has been paid to an exploration of the <strong>tradeoff</strong> between depth of recursion and <script type="math/tex">\alpha</script> (but see <a href="https://link.springer.com/chapter/10.1007/978-3-319-17064-0_9">Qing and Franke 2015</a> and <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0154854">Franke and Degen 2016</a>). In some cases, a higher <script type="math/tex">\alpha</script> value results in the same patterns as a deeper level of recursion. For example, in scalar implicature a higher <script type="math/tex">\alpha</script> value leads to more extreme probabilities on the speaker and consequently on the listener. The same qualitative effect (with quantitative differences) is achieved by assuming a lower <script type="math/tex">\alpha</script> value but a greater recursive depth. In other cases, where the space of alternatives is larger or the resulting belief distributions less peaked, etc., the effect of adding a layer of recursion may be different. This is an issue that requires further systematic exploration.</p>
+
+<p>In general, we believe that connecting the black box <script type="math/tex">\alpha</script> to the psychological literature on memory, attention, and cognitive control is a worthy enterprise. It may also turn out that resource limitations must be modeled in other ways; but thus far, capturing them in the above terms appears to be sufficient. Doing so also has the advantage of not having to assume any particular <strong>mechanism</strong> for resource allocation, allowing for a more direct focus on the pragmatic reasoning process itself.</p>
+
+<p>Here, another question that commonly arises is whether the assumed reasoning process is <strong>too sophisticated</strong>. The claims that are typically made is that language users are not capable of deep recursive reasoning, or that it is much too complicated to integrate so many different pieces of information in real time. If one were to interpret these models as models of the online reasoning process, then it would be an empirical question whether this reasoning process is too complicated to be executed online during conversation. However, since its original conception, RSA modelers have been careful to point out that the models are intended to provide a <strong>computational-level analysis</strong> of the language use problem that agents face (<a href="https://mitpress.mit.edu/books/vision-0">Marr, 1982</a>), rather than specifying the mechanism by which they solve that problem. One should not take, say, each level of recursion as an actual reasoning step. If one wanted to interpret these models as online processing models, one would need to formulate <strong>linking hypotheses</strong> between model output and measures of online processing. One should avoid making pronouncements about presumed processing difficulty simply on the basis of architectural considerations of these models without such linking hypotheses. However, with these hypotheses in hand, we can test the question of whether reifying any model component as a psychological mechanism is useful for explaining online processing phenomena.</p>
+
+<h4 id="testing-the-models">2. Testing the models</h4>
+
+<h5 id="how-do-we-test-the-predictions-of-these-models">How do we test the predictions of these models?</h5>
+
+<h5 id="when-do-we-need-to-empirically-measure-the-prior-vs-assume-a-uniform-prior-what-are-different-ways-of-estimating-the-prior">When do we need to empirically measure the prior (vs. assume a uniform prior)? What are different ways of estimating the prior?</h5>
+
+<h5 id="is-there-a-way-of-measuring-what-the-qud-is-or-manipulating-the-qud">Is there a way of measuring what the QUD is? Or, manipulating the QUD?</h5>
+
+<h5 id="lets-say-we-want-to-do-philosophy-of-science-on-rsa-to-what-extent-are-we-worried-that-you-can-make-rsa-do-anything-rsa-as-a-methodological-tool-vs-rsa-as-a-theory-of-language-use-and-interpretation">Let’s say we want to do philosophy of science on RSA: to what extent are we worried that you can make RSA “do anything”? (RSA as a methodological tool vs. RSA as a theory of language use and interpretation)</h5>
+
+<h5 id="bayesian-inference-is-intractable-in-the-limit----why-are-we-not-worried-about-this">Bayesian inference is intractable in the limit – why are we not worried about this?</h5>
+
+<h4 id="extending-the-models">3. Extending the models</h4>
+
+<h5 id="how-do-we-extend-rsa-to-language-learning">How do we extend RSA to language learning?</h5>
+
+<h5 id="how-do-we-add-syntax-or-more-rich-language-structure-how-should-one-do-compositionality-especially-for-soft-semantics">How do we add syntax or more rich language structure? How should one do compositionality (especially for soft semantics)?</h5>
+
+<h5 id="can-we-think-about-cross-culturallinguistic-differences-in-terms-of-different-weights-on-different-components-of-the-model">Can we think about cross-cultural/linguistic differences in terms of different weights on different components of the model?</h5>
+
+<h5 id="what-are-the-challenges-that-we-expect-in-integrating-time----both-by-going-sub-sentential-to-model-incremental-belief-update-and-by-going-supra-sentential-to-model-dialog-and-even-larger-to-linguistic-conventions">What are the challenges that we expect in integrating time – both by going sub-sentential to model incremental belief update and by going supra-sentential to model dialog, and even larger to linguistic conventions?</h5>
+
+<h5 id="to-what-extent-should-we-be-interested-in-formulating--is-it-feasible-to-formulate-a-unified-utterance-cost-function">To what extent should we be interested in formulating / is it feasible to formulate a unified utterance cost function?</h5>
+
+<h5 id="in-what-ways-can-interlocutor-specific-knowledge-be-incorporated-hierarchical-models">In what ways can interlocutor-specific knowledge be incorporated (hierarchical models)?</h5>
+
+
+
+<hr>
+
+<a href="/probLang/">Table of Contents</a>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+  <a href="http://gscontras.github.io/probLang/" id="github-edit-link">Edit on Github</a>
+</footer>
+
+<script type="text/javascript">
+  $("#github-edit-link").attr("href", github_page_url("/chapters/10-summary.html"))
+</script>
+
+
+  </body>
+
+</html>

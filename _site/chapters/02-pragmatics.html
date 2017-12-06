@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modeling pragmatic inference</title>
+  <link rel="stylesheet" href="https://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  <link rel="stylesheet" href="/probLang/assets/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+  <!-- <link rel="stylesheet" href="/probLang/assets/css/editor.css"> -->
+  <!-- <link rel="stylesheet" href="/probLang/assets/css/webppl-viz.css"> -->
+  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-editor-1.0.1.css">
+  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-viz-0.7.6.css">
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="http://gscontras.github.io/probLang/probLang/chapters/02-pragmatics.html">
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+  <script src="/probLang/assets/js/parse-bibtex.js"></script>
+  <script src="/probLang/assets/js/main.js"></script>
+  <!-- <script src="/probLang/assets/js/webppl-editor.js"></script> -->
+  <!-- <script src="/probLang/assets/js/webppl-viz.js"></script>   -->
+  <!-- <script src="/probLang/assets/js/webppl.min.js" defer async></script> -->
+  <script src="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-editor-1.0.9.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-viz-0.7.11.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/cdn.webppl.org/webppl-v0.9.7.js" defer async></script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+  <a class="site-title" href="/probLang/">Probabilistic languge understanding</a>
+
+  <a class="site-subtitle">An introduction to the Rational Speech Act framework</a>
+
+  <a class="site-authors">By Gregory Scontras and Michael Henry Tessler</a>
+</header>
+
+
+    <div class="page-content-wrapper">
+      <div class="page-content">
+        <h1 class="chapter-title">Modeling pragmatic inference</h1>
+
+<h3 id="day-2-enriching-the-literal-interpretations">Day 2: Enriching the literal interpretations</h3>
+
+<!--   - Building the literal interpretations
+  - Compositional mechanisms and semantic types
+    - Functional Application; Predicate Modification 
+  - The compositional semantics example from DIPPL -->
+
+<h4 id="application-1-scalar-implicature">Application 1: Scalar implicature</h4>
+
+<p>Scalar implicature stands as the poster child of pragmatic inference. Utterances are strengthened—via implicature—from a relatively weak literal interpretation to a pragmatic interpretation that goes beyond the literal semantics: “Some of the apples are red,” an utterance compatible with all of the apples being red, gets strengthed to “Some but not all of the apples are red.”  The mechanisms underlying this process have been discussed at length. reft:goodmanstuhlmuller2013 apply an RSA treatment to the phenomenon and formally articulate the model by which scalar implicatures get calculated.</p>
+
+<p>Assume a world with three apples; zero, one, two, or three of those apples may be red:</p>
+
+<pre><code>// possible states of the world
+var statePrior = function() {
+  return uniformDraw([0, 1, 2, 3])
+};
+statePrior() // sample a state
+</code></pre>
+
+<blockquote>
+  <p><strong>Exercises:</strong></p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Try visualizing <code>statePrior()</code> by drawing many samples and plotting the output (hint: you’ll need to use the <code>repeat()</code> function, which has a strange syntax that is documented <a href="http://webppl.readthedocs.io/en/master/functions/arrays.html#repeat">here</a>).</li>
+    <li>Try visualizing <code>statePrior()</code> by wrapping it in an inference model (à la our <script type="math/tex">L_0</script> model) and plotting the output.</li>
+  </ol>
+</blockquote>
+
+<p>Next, assume that speakers may describe the current state of the world in one of three ways:</p>
+
+<pre><code>// possible utterances
+var utterancePrior = function() {
+  return uniformDraw(['all', 'some', 'none']);
+};
+
+// meaning funtion to interpret the utterances
+var literalMeanings = {
+  all: function(state) { return state === 3; },
+  some: function(state) { return state &gt; 0; },
+  none: function(state) { return state === 0; }
+};
+
+var utt = utterancePrior(); // sample an utterance
+var meaning = literalMeanings[utt]; // get its meaning
+[utt, meaning(3)] // apply meaning to state = 3
+</code></pre>
+
+<p>With this knowledge about the communcation scenario—crucially, the availability of the “all” alternative utterance—a pragmatic listener is able to infer from the “some” utterance that the “all” utterance describes an unlikely state. In other words, the pragmatic listener strengthens “some” via scalar implicature.</p>
+
+<p>Technical note: Below, <code>cache</code> is used to save the results of the various Bayesian inferences being performed. This is used for computational efficiency when dealing with nested inferences.</p>
+
+<pre><code>// Here is the code from the basic scalar implicature model
+
+// possible states of the world
+var statePrior = function() {
+  return uniformDraw([0, 1, 2, 3])
+};
+
+// possible utterances
+var utterancePrior = function() {
+  return uniformDraw(['all', 'some', 'none']);
+};
+
+// meaning funtion to interpret the utterances
+var literalMeanings = {
+  all: function(state) { return state === 3; },
+  some: function(state) { return state &gt; 0; },
+  none: function(state) { return state === 0; }
+};
+
+// literal listener
+var literalListener = cache(function(utt) {
+  return Infer({model: function(){
+    var state = statePrior()
+    var meaning = literalMeanings[utt]
+    condition(meaning(state))
+    return state
+  }})
+});
+
+// set speaker optimality
+var alpha = 1
+
+// pragmatic speaker
+var speaker = cache(function(state) {
+  return Infer({model: function(){
+    var utt = utterancePrior()
+    factor(alpha * literalListener(utt).score(state))
+    return utt
+  }})
+});
+
+// pragmatic listener
+var pragmaticListener = cache(function(utt) {
+  return Infer({model: function(){
+    var state = statePrior()
+    observe(speaker(state),utt)
+    return state
+  }})
+});
+
+print("pragmatic listener's interpretation of 'some':")
+viz.auto(pragmaticListener('some'));
+
+</code></pre>
+
+<blockquote>
+  <p><strong>Exercises:</strong></p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Explore what happens if you make the speaker <em>less</em> optimal.</li>
+    <li>Subtract one of the utterances. What changed?</li>
+    <li>Add a new utterance. What changed?</li>
+    <li>Check what would happen if ‘some’ literally meant some-but-not-all (hint: use <code>!=</code> to assert that two values are not equal).</li>
+    <li>Change the relative probabilities of the various states and see what happens to model predictions.</li>
+  </ol>
+</blockquote>
+
+<h4 id="application-2-scalar-implicature-and-speaker-knowledge">Application 2: Scalar implicature and speaker knowledge</h4>
+
+<p>Capturing scalar implicature within the RSA framework might not induce waves of excitement. However, by implementing implicature-calculation within a formal model of communication, we can also capture its interactions with other pragmatic factors. Goodman and Stuhlmüller (2013) explored what happens when the speaker only has partial knowledge about the state of the world (Fig. 1). Below, we explore this model, taking into account the listener’s knowledge about the speaker’s epistemic state: whether or not the speaker has full or partial knowledge about the state of the world.</p>
+
+<p><img src="../images/scalar.png" alt="Fig. 3: Example communication scenario from Goodman and Stuhmüller." style="width: 500px;" /></p>
+<center>Fig. 1: Example communication scenario from Goodman and Stuhmüller: How will the listener interpret the speaker’s utterance? How will this change if she knows that he can see only two of the objects?.</center>
+
+<p>In the extended Scalar Implicature model, the pragmatic listener infers the true state of the world not only on the basis of the observed utterance, but also the speaker’s epistemic access <script type="math/tex">a</script>.</p>
+
+<script type="math/tex; mode=display">P_{L_{1}}(s\mid u, a) \propto P_{S_{1}}(u\mid s, a) \cdot P(s)</script>
+
+<pre><code>// pragmatic listener
+var pragmaticListener = cache(function(access,utt) {
+  return Infer({model: function(){
+    var state = statePrior()
+    observe(speaker(access,state),utt)
+    return numTrue(state)
+  }})
+});
+</code></pre>
+
+<p>We have to enrich the speaker model: first the speaker makes an observation <script type="math/tex">o</script> of the true state <script type="math/tex">s</script> with access <script type="math/tex">a</script>. On the basis of the observation and access, the speaker infers the true state.</p>
+
+<pre><code>///fold:
+// tally up the state
+var numTrue = function(state) {
+  var fun = function(x) {
+    x ? 1 : 0
+  }
+  return sum(map(fun,state))
+}
+///
+
+// red apple base rate
+var baserate = 0.8
+
+// state builder
+var statePrior = function() {
+  var s1 = flip(baserate)
+  var s2 = flip(baserate)
+  var s3 = flip(baserate)
+  return [s1,s2,s3]
+}
+
+// speaker belief function
+var belief = function(actualState, access) {
+  var fun = function(access,state) {
+    return access ? state : uniformDraw(statePrior())
+  }
+  return map2(fun, access, actualState);
+}
+
+print("1000 runs of the speaker's belief function:")
+
+viz.auto(repeat(1000,function() {
+  numTrue(belief([true,true,true],[true,true,false]))
+}))
+
+</code></pre>
+
+<blockquote>
+  <p><strong>Exercise:</strong> See what happens when you change the red apple base rate.</p>
+</blockquote>
+
+<p>The speaker then chooses an utterance <script type="math/tex">u</script> to communicate the true state <script type="math/tex">s</script> that likely generated the observation <script type="math/tex">o</script> that the speaker made with access <script type="math/tex">a</script>.</p>
+
+<script type="math/tex; mode=display">P_{S_{1}}(u\mid o, a) \propto exp(\alpha\mathbb{E}_{P(s\mid o, a)}[U(u; s)])</script>
+
+<pre><code>// pragmatic speaker
+var speaker = cache(function(access,state) {
+  return Infer({model: function(){
+    var utterance = utterancePrior()
+    var beliefState = belief(state,access)
+    factor(alpha * literalListener(utterance).score(beliefState))
+    return utterance
+  }})
+});
+</code></pre>
+
+<p>The speaker’s utility function remains unchanged, such that utterances are chosen to minimize cost and maximize informativity.</p>
+
+<script type="math/tex; mode=display">U_{S_{1}}(u; s) = log(L_{0}(s\mid u)) - C(u)</script>
+
+<p>The intuition (which Goodman and Stuhlmüller validate experimentally) is that in cases where the speaker has partial knowledge access (say, she knows about only two out of three relevant apples), the listener will be less likely to calculate the implicature (because he knows that the speaker doesn’t have the evidence to back up the strengthened meaning).</p>
+
+<pre><code>///fold:
+// tally up the state
+var numTrue = function(state) {
+  var fun = function(x) {
+    x ? 1 : 0
+  }
+  return sum(map(fun,state))
+}
+///
+
+// Here is the code from the Goodman and Stuhlmüller speaker-access SI model
+
+// red apple base rate
+var baserate = 0.8
+
+// state prior
+var statePrior = function() {
+  var s1 = flip(baserate)
+  var s2 = flip(baserate)
+  var s3 = flip(baserate)
+  return [s1,s2,s3]
+}
+
+// speaker belief function
+var belief = function(actualState, access) {
+  var fun = function(access,state) {
+    return access ? state : uniformDraw(statePrior())
+  }
+  return map2(fun, access, actualState);
+}
+
+// utterance prior
+var utterancePrior = function() {
+  uniformDraw(['all','some','none'])
+}
+
+// meaning funtion to interpret utterances
+var literalMeanings = {
+  all: function(state) { return all(function(s){s}, state); },
+  some: function(state) { return any(function(s){s}, state); },
+  none: function(state) { return all(function(s){s==false}, state); }
+};
+
+// literal listener
+var literalListener = cache(function(utt) {
+  return Infer({model: function(){
+    var state = statePrior()
+    var meaning = literalMeanings[utt]
+    condition(meaning(state))
+    return state
+  }})
+});
+
+// set speaker optimality
+var alpha = 1
+
+// pragmatic speaker
+var speaker = cache(function(access,state) {
+  return Infer({model: function(){
+    var utt = utterancePrior()
+    var beliefState = belief(state,access)
+    factor(alpha * literalListener(utt).score(beliefState))
+    return utt
+  }})
+});
+
+// pragmatic listener
+var pragmaticListener = cache(function(access,utt) {
+  return Infer({model: function(){
+    var state = statePrior()
+    observe(speaker(access,state),utt)
+    return numTrue(state)
+  }})
+});
+
+print("pragmatic listener for a full-access speaker:")
+viz.auto(pragmaticListener([true,true,true],'some'))
+print("pragmatic listener for a partial-access speaker:")
+viz.auto(pragmaticListener([true,true,false],'some'))
+
+</code></pre>
+
+<blockquote>
+  <p><strong>Exercise:</strong></p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>Check the predictions for the other possible knowledge states.</li>
+    <li>Compare the full-access predictions with the predictions from the simpler scalar implicature model above. Why are the predictions of the two models different? How can you get the model predictions to converge? (Hint: first try to align the predictions of the simpler model with those of the knowledge model, then try aligning the predictions of the knowledge model with those fo the simpler model.)</li>
+  </ol>
+</blockquote>
+
+<p>We have seen how the RSA framework can implement the mechanism whereby utterance interpretations are strengthened. Through an interaction between what was said, what could have been said, and what all of those things literally mean, the model delivers scalar implicature. And by taking into account awareness of the speaker’s knowledge, the model successfully <em>blocks</em> implicatures in those cases where listeners are unlikely to access them.</p>
+
+
+<hr>
+
+<a href="/probLang/">Table of Contents</a>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+  <a href="http://gscontras.github.io/probLang/" id="github-edit-link">Edit on Github</a>
+</footer>
+
+<script type="text/javascript">
+  $("#github-edit-link").attr("href", github_page_url("/chapters/02-pragmatics.html"))
+</script>
+
+
+  </body>
+
+</html>

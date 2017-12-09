@@ -890,8 +890,11 @@ var literalListener = cache(function(utterance, group_interp, qud, context) {
 
 // Pragmatic speaker samples an utterance and factors based on listener informativity
 var alpha1 = 1;
-var pragmaticSpeaker = cache(function(qudValue, group_interp, qud, context) {
+var pragmaticSpeaker = cache(function(state, group_interp, qud, context) {
   return Infer({method: 'enumerate', model: function() {
+    var qudFn = qudFns[qud];
+    var qudValue = qudFn(state, group_interp);
+
     var utterance = utterancePrior();
     factor(alpha1 * literalListener(utterance, group_interp, qud, context)
            .score(qudValue));
@@ -1086,8 +1089,11 @@ var literalListener = cache(function(utterance, group_interp, qud, context) {
 
 // Pragmatic speaker samples an utterance and factors based on listener informativity
 var alpha1 = 1;
-var pragmaticSpeaker = cache(function(qudValue, group_interp, qud, context) {
+var pragmaticSpeaker = cache(function(state, group_interp, qud, context) {
   return Infer({method: 'enumerate', model: function() {
+    var qudFn = qudFns[qud];
+    var qudValue = qudFn(state, group_interp);
+
     var utterance = utterancePrior();
     factor(alpha1 * literalListener(utterance, group_interp, qud, context)
            .score(qudValue));
@@ -1106,10 +1112,7 @@ var pragmaticListener = cache(function(utterance, context) {
     var group_interp = groupInterpPrior();
     //////////////
     
-    var qudFn = qudFns[qud];
-    var qudValue = qudFn(state, group_interp);
-    
-    observe(pragmaticSpeaker(qudValue, group_interp, qud, context), utterance);
+    observe(pragmaticSpeaker(state, group_interp, qud, context), utterance);
     
     return state;   
   }});
@@ -1302,8 +1305,11 @@ var literalListener = cache(function(utterance, group_interp, qud, context) {
 
 // Pragmatic speaker samples an utterance and factors based on listener informativity
 var alpha1 = 1;
-var pragmaticSpeaker = cache(function(qudValue, group_interp, qud, context) {
+var pragmaticSpeaker = cache(function(state, group_interp, qud, context) {
   return Infer({method: 'enumerate', model: function() {
+    var qudFn = qudFns[qud];
+    var qudValue = qudFn(state, group_interp);
+
     var utterance = utterancePrior();
     factor(alpha1 * literalListener(utterance, group_interp, qud, context)
            .score(qudValue));
@@ -1321,10 +1327,7 @@ var pragmaticListener = cache(function(utterance, context) {
     var group_interp = groupInterpPrior();
     //////////////
     
-    var qudFn = qudFns[qud];
-    var qudValue = qudFn(state, group_interp);
-    
-    observe(pragmaticSpeaker(qudValue, group_interp, qud, context), utterance);
+    observe(pragmaticSpeaker(state, group_interp, qud, context), utterance);
     
     return state;   
   }});

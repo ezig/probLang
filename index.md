@@ -3,7 +3,115 @@ layout: chapter
 title: English Reciprocals in RSA
 ---
 
-#### Shannon Bryant and Ezra Zigmond
+### Shannon Bryant and Ezra Zigmond
+
+English reciprocal sentences with can be ambiguous in at least two respects: we might be uncertain about the nature of the domain over which reciprocity is meant to apply as well as the degree to which reciprocity actually holds. In this paper, we argue that the interpretation and endorsement of reciprocal sentences is shaped by pragmatic reasoning that makes reference to prior knowledge about the state of the world as well as discourse factors like Question Under Discussion. We then present a model in the RSA framework that captures the pragmatics of English reciprocity. 
+
+## Background
+
+### Strong Reciprocity and Accomodation
+Under its strongest reading, the English reciprocal pronoun _each other_ requires that a binary relation hold for every ordered pair of distinct entities in the domain denoted by the plural antecedent. Consider, for example, sentence [1]:
+
+[1] John, Bill, and Tom saw each other 
+
+<img src="assets/img/strongrecip.png" style="width: 175px;"/>
+
+The most natural interpretation for [1] is that every boy named saw every other boy named – that is, that the “seeing” relation is true for every possible pair of boys, as illustrated in the schematic above. We take this strong reading to be the core meaning of the English reciprocal operator, formalized in [2].
+
+[2] $$\ RECP = \lambda R. \ \lambda Z. \ \forall x: x \in Z . \ \forall y : y \in Z \wedge y \neq x . R \ y \ x$$
+
+$$\text{where R is a binary relation and Z is a set of entities}$$
+
+While the above definition applies straightforwardly to sentences like [1], it is readily observed that the reciprocal pronoun can be felicitously employed in contexts that do not satisfy the semantic requirements captured in [2]. For instance, we would happily assent to the use of the sentence in [3] to describe a situation in which the three boys are standing in a row, though the relation “stand alongside” cannot possibly be true of every pair of boys as human beings possess only two sides.
+
+[3] John, Bill, and Tom are standing alongside each other.
+
+<img src="assets/img/standnextto.png" style="width: 300px;"/>
+
+Furthermore, it is perfectly natural to use [4] to describe a set of plates neatly stacked, though the “stacked on top of” relation is functionally blocked from holding reciprocally for even two pieces of dishware since, by virtue of being stacked, one plate must necessarily be below (rather than atop) the other. 
+
+[4] The plates are stacked on top of each other. 
+
+<img src="assets/img/ontopof.png" style="height: 200px;"/>
+
+Although some have claimed that such “weakened” readings reflect alternative semantics for the reciprocal operator (cf. Langendoen, 1978; Dalrymple et al., 1998), we assume instead the unified analysis proposed by Aggazzotti (to appear), according to which English reciprocity is invariably strong. 
+
+Aggazzotti argues that what salvages examples like [3] and [4] from falsehood is pragmatic accommodation, derived from reasoning about what sort of relation the speaker was likely trying to convey. For relational predicates that are inherently incompatible with strong reciprocity, accommodation amounts to an automatic adoption of the strongest possible interpretation considering physical and functional constraints. However, as addressed by Aggazzotti, the pragmatic flexibility we exhibit with respect to reciprocals occasionally allows for ambiguity between possible interpretations. Here we will focus on two points of potential ambiguity – domain and degree.
+
+### Ambiguity in Interpreting Reciprocal Sentences
+
+#### Domain of Reciprocity
+
+The _domain of reciprocity_ is the set of individuals selected by the antecedent of the reciprocal pronoun over which the reciprocal operator applies. In sentence [1], the domain was composed of three individuals. However, in some cases, the domain consists of salient subpluralities. For example, the antecedent of the reciprocal in [5] introduces two salient subgroups: the group of boys and the group of girls. 
+
+[5] The boys and girls taught each other. 
+
+Imagine a situation in which elementary school classes are divided by sex, such that the boys and girls referred to in [5] comprise two distinct classes. Under one possible reading, sentence [5] expresses that the boys taught the boys while the girls taught the girls; in other words, [5] can convey that the relation of “teaching” holds reciprocally within the salient subgroups. Alternatively, [5] can be interpreted as expressing that teaching occurred across the subgroups, i.e., that the boys taught the girls and the girls taught the boys. The two readings are illustrated in the schemata in [6]. 
+
+[6] The boys and girls taught each other. 
+
+Within: 
+
+<img src="assets/img/within.png" style="widhth: 200px;"/>
+
+Across:
+
+<img src="assets/img/across.png" style="width: 200px;"/>
+
+Deciding between within- and across-group readings can be crucial since, in some cases, one interpretation can be true while the other is false. In the scenario sketched for sentence [5], it is possible that both the boys taught each other and the girls taught each other without any teaching having occurred between the two classes. In fact, we are likely to favor this within-group reading due to our prior assumptions about classroom activities (specifically, that they tend to be contained within classes). Conversely, when faced with a sentence like [7] uttered in reference to the same two groups of boys and girls, we are more likely to settle for an across-group interpretation. 
+
+[7] The boys and the girls don’t know each other. 
+
+While it is highly unlikely that all of the students in a class are strangers to one another, it is reasonable that students in different classes have never met. 
+
+To account for within- and across-group readings, Aggazzotti posits an extended semantic for the reciprocal operator that incorporates two iterations of the partition function, $$\mathscr{P}(Z)$$, that maps a set of entities $$Z$$ onto a contextually-salient partition of $$Z$$: 
+
+[8] $$\ RECP = \lambda R. \ \lambda Z. \ \forall Z' \in \mathscr{P}(Z) . \ \forall x: x \in \mathscr{P}(Z') . \ \forall y : y \in \mathscr{P}(Z') \wedge y \neq x . R \ y \ x$$
+
+Note that the salient partition of a set of entities can be the partition of the whole as well as the partition into singletons; hence, the definition in [8] subsumes the simpler definition in [2], resulting in core cases like sentence [1] when the first 𝒫(Z) selects the entire domain while $$\mathscr{P}(Z’)$$ partitions the domain into individual entities. 
+
+Ambiguity arises for sentences like [5] and [7] because the domain of reciprocity can be partitioned in more than one way. If we take the first partition to be the partition into sexes and the second to be the partition into singletons, we arrive at a within-group reading. On the other hand, if we take the first partition to be the partition of the whole and the second to be the partition into sexes, we derive an across-group reading. Crucially, because the partition function relies on contextual saliency rather than explicit specification, mediation between within- and across-group interpretations rests on reasoning about the relative likelihoods of each reading holding in the world. And as the contrast between [5] and [7] show, our intuitions about the prior probabilities of within- and across-group readings are informed by both predicate meaning and situational information. 
+
+#### Degree of Reciprocity
+
+By degree of reciprocity, we refer to the number of pairs of individuals for which the reciprocal relation actually holds. Recall that we assume the English reciprocal operator to be necessarily strong, requiring that the predicate relation hold symmetrically for all pairs of individuals in the relevant domain. And is some cases, this definition perfectly reflects the truth conditions of a reciprocal sentence. Let’s assume an across-group reading for sentence [9]. 
+
+[9] The boys and girls know each other. 
+
+This sentence can be used to convey a state in which it is true that every boy taught every girl, and vice versa, in accordance with the strong semantic. We can think of this as a _distributive_ reading of the reciprocal: the reciprocity requirements are distributed across the individual entities comprising the salient subpluralities (i.e. the boys and the girls), and so the relation “know” must be true for all possible boy-girl pairs. The distributed reading is schematized in [10]. 
+
+[10]  The boys and girls know each other.
+(Distributive: every boy knows every girl, and every girl knows every boy)
+
+<img src="assets/img/distributive.png" style="width: 200px;"/>
+
+This is not the only condition in which [9] can be felicitously used. We are likely to assent to [5] even if the “knowing” relation doesn’t hold for every boy-girl pair as long as it holds across the groups to a significant degree, that is, as long as enough boys know girls and enough girls know boys. This corresponds to a collective reading of reciprocity, as illustrated in [11]. 
+
+[11]  The boys and girls know each other. 
+    (Collective: many of the boys know girls, and many of the girls know boys.)
+
+<img src="assets/img/collective.png" style="width: 200px;"/>
+
+Finally, in some cases, the truth conditions of a reciprocal sentence require that the relation hold reciprocally for only one pair of individual. For instance, consider a circumstance in which someone asks whether the male and female students have ever met. Imagine that one boy does know a girl from the other class. We might then endorse [9] as a way of communicating that it is not the case that the boys and girls don’t know each other. Under across-group readings, this “at least one” truth condition is comparable to a _group_ interpretation, according to which the subpluralities constituting the domain of reciprocity are understood as indivisible collectives: so long as the reciprocal predicate holds for one pair of individuals across the groups, it holds for the groups to which those individuals belong. The group reading is illustrated in [12].
+
+[12]  The boys and girls know each other. 
+(Group: some boy knows some girl.)
+
+<img src="assets/img/group.png" style="width: 200px;"/>
+
+In sum, interpreting reciprocal sentences requires reasoning about the domain of reciprocity (across or within) as well as the degree of reciprocity (distributive, collective, or group). Within the RSA framework, we are able to model this reasoning.
+
+## Modelling Reciprocity in RSA
+
+### Reciprocity in the RSA Framework
+
+We model English reciprocity using the Bayesian Rational Speech Act (RSA) framework (Frank & Goodman, 2012). Within RSA, communication is treated as recursive reasoning between a speaker and a listener. Specifically, the pragmatic listener reasons about what world-state the speaker was most likely trying to express given the utterance used and their shared background knowledge, while the pragmatic speaker endorses utterances according to the likelihood that the pragmatic listener will arrive at the correct interpretation. RSA thus allows us to formalize the contributions prior knowledge and discourse factors make to both the interpretation and endorsement of a reciprocal sentence.
+
+With respect to reciprocal sentences, pragmatic discourse participants must reason about the domain and degree of reciprocity. As discussed in the previous section, domain interpretation depends (at least in part) on prior knowledge about probabilities of within- and across-group readings given the meaning of the predicate and situational information. Degree interpretation depends (at least in part) on the inferred communicative intent of the speaker. We can conceive of this inferred intent as a question under discussion, or QUD, that the utterance is meant to answer. For instance if the QUD is whether any boys in one class know any girls in another, we could felicitously utter [9], The boys and girls know each other, to convey any state in which at least one boy knows at least one girl. On the other hand, if the QUD is whether all the boys know all the girls, the reciprocal can be felicitously used only if the state is such that the predicate relation holds symmetrically for all boy-girl pairs. 
+
+It is likely that other details impact the interpretation of reciprocal sentences in addition to those examined here. In particular, both the number of salient subgroups and the number of individuals within each subgroup are likely to influence our reasoning about domain and degree. For the sake of simplicity, group size and number have been held constant within our model, with each sample context consisting of two salient subgroups of three individuals each. Further work on English reciprocity might explore the contribution of these two parameters. 
+
+### The Model 
 
 Recall that we’re assuming that there are two salient groups: in our running example, a group of boys and a group of girls. Those groups both have some size, but really what we care about is how many pairs are within each group as well as how many pairs exist across the groups. We can compute the number of pairs combinatorially – the math is folded, but is simple for small cases. As shown in the figure below, if each group has 3 individuals, then there will be three pairs within each group and 9 pairs across groups:
 

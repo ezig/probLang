@@ -2031,7 +2031,9 @@ var stateprime = {
   group2: 2,
 }
 
+display("S2")
 viz(s2(state, "classroom.presentto"));
+display("S2'")
 viz(s2prime(stateprime, "classroom.presentto", "within"));
 ~~~~
 

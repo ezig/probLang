@@ -1514,9 +1514,9 @@ display("Present To")
 viz(pragmaticListener("eachother", "classroom.presentto"));
 ~~~~
 
-We observe two main effects: first, the relative difference in the across group and within group prior probabilities affects the relative likelihood of choosing an across group and within group interpretation. Looking at the difference between the sum over the orange bars and the sum over the blue bars, we see that "classroom.taught" is much more strongly biased towards a within-group interpretation than "classroom.presentto".
+We observe two main effects: first, the relative difference in the across group and within group prior probabilities affects the relative likelihood of choosing an across-group or within-group interpretation. Looking at the difference between the sum over the orange bars and the sum over the blue bars, we see that "classroom.taught" is much more strongly biased towards a within-group interpretation than "classroom.presentto".
 
-The second main effect is that the absolute prior probabilities relavent to a particular interpretation seem to affect the distribution of likely QUDs within that interpretation. Observe that for a within-group interpretation for "classroom.taught", the "all" QUD is fairly likely compared to the others, while this QUD is strongly dispreferred for "classroom.present".
+The second main effect is that the absolute prior probabilities relevent to a particular interpretation affects the distribution of likely QUDs within that interpretation. Observe that for a within-group interpretation of "classroom.taught", the "all" QUD is fairly likely compared to the others, while this QUD is strongly dispreferred for "classroom.present".
 
 Last, $$S_2$$ models a truth value judgment. The speaker is presented with a state and the context and must decide whether or not to endorse the ambiguous utterance.
 
